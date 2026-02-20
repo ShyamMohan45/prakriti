@@ -2,13 +2,23 @@
 import os
 from fastapi import FastAPI, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+from dotenv import load_dotenv
+from huggingface_hub import InferenceClient
+from typing import Generator
 
 from app.ai import analyze_medical_file
 from app.db import save_analysis, get_analyses_by_user
-from app.auth import get_user  
+from app.auth import get_user
+
+load_dotenv()  
+
+load_dotenv()
+
+HF_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 app = FastAPI(title="Medical AI Backend")
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,6 +27,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+if HF_TOKEN:
+    client = InferenceClient(api_key=HF_TOKEN)
+
+SYSTEM_MESSAGE = {
+    "role": "system",
+    "content": (
+        "You are a clinical assistant. "
+        "Always cite WHO, CDC, NHS, or Mayo Clinic. "
+        "Provide evidence-based medical information and include a disclaimer."
+    ),
+}
+
+class ChatRequest(BaseModel):
+    message: str
 
 
 
@@ -77,5 +102,55 @@ def get_past_analyses(user=Depends(get_user)):
         "status": "success",
         "data": data
     }
+
+
+# Streaming Chat Endpoint for Document Analysis
+
+@app.post("/chat/stream")
+def chat_stream(req: ChatRequest):
+    """
+    Stream clinical assistant responses for document analysis feedback.
+    Requires HUGGINGFACEHUB_API_TOKEN environment variable.
+    """
+    if not HF_TOKEN:
+        return {
+            "status": "error",
+            "message": "HuggingFace API token not configured"
+        }
+
+    def generator() -> Generator[str, None, None]:
+        try:
+            stream = client.chat_completion(
+                model="meta-llama/Meta-Llama-3-8B-Instruct",
+                messages=[
+                    SYSTEM_MESSAGE,
+                    {"role": "user", "content": req.message},
+                ],
+                max_tokens=500,
+                temperature=0.7,
+                stream=True,
+            )
+
+            for chunk in stream:
+                if not chunk.choices:
+                    continue
+
+                delta = chunk.choices[0].delta
+                if not delta:
+                    continue
+
+                text = delta.get("content")
+                if text:
+                    yield text
+
+        except Exception as e:
+            yield f"\n[Error: {str(e)}]\n"
+
+    return StreamingResponse(generator(), media_type="text/plain")
+
+
+@app.get("/health")
+def health():
+    return {"status": "DxAssist Clinical Backend Running"}
 
 

@@ -38,10 +38,10 @@ export async function POST(req) {
       )
     }
 
-   
+    // Delete OTP
     await db.query("DELETE FROM email_otps WHERE email = ?", [email])
 
-   
+    // Get user
     const [users] = await db.query(
       "SELECT id, name, email FROM users WHERE email = ?",
       [email]

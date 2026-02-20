@@ -229,9 +229,10 @@ export default function Home() {
                     uppercase tracking-wide
                     flex items-center gap-2
                   "
+                  onClick={() => window.open("https://prakriti-gamma.vercel.app/", "_blank")}
                 >
                   <span>🖼️</span>
-                  Skin Disease Diagnosis
+                  Prakriti Analysis
                   <span>→</span>
                 </button>
               </div>
