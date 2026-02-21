@@ -19,11 +19,17 @@ load_dotenv()
 
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
+print(f"🔑 HuggingFace Token loaded: {bool(HUGGINGFACEHUB_API_TOKEN)}")
+if HUGGINGFACEHUB_API_TOKEN:
+    print(f"   Token starts with: {HUGGINGFACEHUB_API_TOKEN[:20]}...")
+else:
+    print("   ⚠️ WARNING: No HuggingFace token found!")
+
 app = FastAPI(title="Medical AI Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],  # frontend URL
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000"],  # frontend URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
