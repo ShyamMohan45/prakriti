@@ -1,7 +1,7 @@
 
 
 
-import { db } from "@/lib/db"
+import { getPool } from "@/lib/db"
 import { NextResponse } from "next/server"
 import { signToken } from "@/lib/auth"
 import { cookies } from "next/headers"

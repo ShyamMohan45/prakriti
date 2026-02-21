@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
+import { getPool } from "@/lib/db"
 
 export async function GET() {
   try {

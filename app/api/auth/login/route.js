@@ -1,6 +1,6 @@
 
 
-import { db } from "@/lib/db"
+import { getPool } from "@/lib/db"
 import bcrypt from "bcryptjs"
 import { signToken } from "@/lib/auth"
 import { cookies } from "next/headers"

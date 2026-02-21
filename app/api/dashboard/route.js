@@ -1,7 +1,7 @@
 
 
 
-import { db } from "@/lib/db";
+import { getPool } from "@/lib/db";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth";
 import { NextResponse } from "next/server";

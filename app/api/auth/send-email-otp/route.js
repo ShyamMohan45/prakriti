@@ -2,7 +2,7 @@
 
 
 
-import { db } from "@/lib/db"
+import { getPool } from "@/lib/db"
 import { NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 import { createTables } from "@/lib/dbUtils"
