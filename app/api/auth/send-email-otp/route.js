@@ -59,16 +59,32 @@ export async function POST(req) {
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
+    console.log("🔑 [OTP] Generated OTP:", otp, "(type:", typeof otp, ")")
+    console.log("⏰ [OTP] Expires at:", expiresAt)
+
     // Store OTP in database
     try {
       await db.query("DELETE FROM email_otps WHERE email = ?", [email])
       console.log("✅ [OTP] Deleted old OTPs")
 
-      await db.query(
+      const [insertResult] = await db.query(
         "INSERT INTO email_otps (email, otp, expires_at) VALUES (?, ?, ?)",
         [email, otp, expiresAt]
       )
-      console.log("✅ [OTP] OTP stored in database:", otp)
+      console.log("✅ [OTP] OTP stored in database with ID:", insertResult.insertId)
+      console.log("   Email:", email)
+      console.log("   OTP:", otp)
+      console.log("   Expires at:", expiresAt)
+
+      // Verify it was stored
+      const [verify] = await db.query(
+        "SELECT email, otp, expires_at FROM email_otps WHERE email = ?",
+        [email]
+      )
+      console.log("✅ [OTP] Verification - Records in DB:", verify.length)
+      verify.forEach((r) => {
+        console.log(`   Stored: email="${r.email}", otp="${r.otp}" (type: ${typeof r.otp}), expires_at=${r.expires_at}`)
+      })
     } catch (dbErr) {
       console.error("❌ [OTP] Database storage error:", dbErr)
       throw dbErr

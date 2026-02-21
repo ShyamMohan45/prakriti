@@ -51,7 +51,7 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, { role: "bot", text: "" }])
 
     try {
-      const res = await fetch("http://127.0.0.1:8002/chat/stream", {
+      const res = await fetch("http://localhost:8000/chat/stream", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),

@@ -41,7 +41,7 @@ export default function AnalyzePage() {
 
     try {
       // ✅ SEND user_id to backend in header
-      const res = await fetch("http://127.0.0.1:8001/analyze", {
+      const res = await fetch("http://localhost:8000/analyze", {
         method: "POST",
         body: formData,
         headers: {
@@ -50,11 +50,19 @@ export default function AnalyzePage() {
         credentials: "include",
       });
 
+      console.log("📡 [Analyze] Response status:", res.status);
+      console.log("📡 [Analyze] Response ok:", res.ok);
+
+      const text = await res.text();
+      console.log("📡 [Analyze] Response text:", text);
+
       if (!res.ok) {
-        throw new Error(`Server error: ${res.status}`);
+        console.error("❌ [Analyze] Server error:", res.status, text);
+        throw new Error(`Server error: ${res.status} - ${text}`);
       }
 
-      const json = await res.json();
+      const json = JSON.parse(text);
+      console.log("✅ [Analyze] Parsed response:", json);
 
       setSavingToDB(true);
 
@@ -73,10 +81,12 @@ export default function AnalyzePage() {
           : ["No specific evidence markers found in the document."]
       });
 
+      console.log("✅ [Analyze] Result set successfully");
       setSavingToDB(false);
       setChatMessages([]);
       setChatInput("");
     } catch (err) {
+      console.error("❌ [Analyze] Error:", err);
       setError(err.message || "Unable to analyze document");
       setSavingToDB(false);
     } finally {
@@ -457,6 +467,7 @@ export default function AnalyzePage() {
             )}
           </div>
         )}
+      </div>
     </div>
   );
 }

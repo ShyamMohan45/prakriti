@@ -15,7 +15,7 @@ export default function PastAnalysesPage() {
       return;
     }
 
-    fetch("http://127.0.0.1:8001/analyses", {
+    fetch("http://localhost:8000/analyses", {
       credentials: "include",
       headers: {
         "x-user-id": user.id.toString(),
