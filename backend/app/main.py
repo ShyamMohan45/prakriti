@@ -11,25 +11,28 @@ from typing import Generator
 from app.ai import analyze_medical_file
 from app.db import save_analysis, get_analyses_by_user
 from app.auth import get_user
+from app.medical_routes import router as medical_router
+
 
 load_dotenv()  
 
-load_dotenv()
 
-HF_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
 app = FastAPI(title="Medical AI Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3001"],  # frontend URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-if HF_TOKEN:
-    client = InferenceClient(api_key=HF_TOKEN)
+app.include_router(medical_router)
+
+if HUGGINGFACEHUB_API_TOKEN:
+    client = InferenceClient(token=HUGGINGFACEHUB_API_TOKEN)
 
 SYSTEM_MESSAGE = {
     "role": "system",
@@ -112,7 +115,7 @@ def chat_stream(req: ChatRequest):
     Stream clinical assistant responses for document analysis feedback.
     Requires HUGGINGFACEHUB_API_TOKEN environment variable.
     """
-    if not HF_TOKEN:
+    if not HUGGINGFACEHUB_API_TOKEN:
         return {
             "status": "error",
             "message": "HuggingFace API token not configured"
@@ -154,3 +157,4 @@ def health():
     return {"status": "DxAssist Clinical Backend Running"}
 
 
+print("HF TOKEN:", HUGGINGFACEHUB_API_TOKEN)
