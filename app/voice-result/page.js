@@ -1,8 +1,9 @@
 "use client"
 
+import { Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 
-export default function VoiceResultPage() {
+function VoiceResultContent() {
   const params = useSearchParams()
   const router = useRouter()
 
@@ -43,5 +44,13 @@ export default function VoiceResultPage() {
         </div>
       </section>
     </main>
+  )
+}
+
+export default function VoiceResultPage() {
+  return (
+    <Suspense fallback={null}>
+      <VoiceResultContent />
+    </Suspense>
   )
 }

@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "../context/AuthContext"
 
-export default function EmailOTPLogin() {
+function EmailOTPLoginContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { setUser } = useAuth()
@@ -134,5 +134,13 @@ export default function EmailOTPLogin() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function EmailOTPLogin() {
+  return (
+    <Suspense fallback={null}>
+      <EmailOTPLoginContent />
+    </Suspense>
   )
 }

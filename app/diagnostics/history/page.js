@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/app/context/AuthContext";
 import SeverityCard from "../analyze/SeverityCard";
+import { BACKEND_URL } from "@/lib/backendUrl";
 
 export default function PastAnalysesPage() {
   const { user } = useAuth();
@@ -15,7 +16,7 @@ export default function PastAnalysesPage() {
       return;
     }
 
-    fetch("http://localhost:8000/analyses", {
+    fetch(`${BACKEND_URL}/analyses`, {
       credentials: "include",
       headers: {
         "x-user-id": user.id.toString(),

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "../context/AuthContext"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { BACKEND_URL } from "@/lib/backendUrl"
 
 export default function KnowledgeBasePage() {
   const router = useRouter()
@@ -44,7 +45,7 @@ export default function KnowledgeBasePage() {
       const formData = new FormData()
       formData.append("file", audioBlob)
 
-      const res = await fetch("http://localhost:8000/api/speech", {
+      const res = await fetch(`${BACKEND_URL}/api/speech`, {
         method: "POST",
         body: formData,
       })

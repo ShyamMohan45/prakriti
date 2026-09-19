@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import SeverityCard from "./SeverityCard";
 import { useAuth } from "@/app/context/AuthContext";
+import { BACKEND_URL } from "@/lib/backendUrl";
 
 /* Severity order for sorting */
 const severityOrder = {
@@ -41,7 +42,7 @@ export default function AnalyzePage() {
 
     try {
       // ✅ SEND user_id to backend in header
-      const res = await fetch("http://localhost:8000/analyze", {
+      const res = await fetch(`${BACKEND_URL}/analyze`, {
         method: "POST",
         body: formData,
         headers: {
@@ -120,7 +121,7 @@ export default function AnalyzePage() {
     setStreaming(true);
 
     try {
-      const response = await fetch("http://localhost:8000/chat/stream", {
+      const response = await fetch(`${BACKEND_URL}/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: chatInput }),

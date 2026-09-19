@@ -28,15 +28,20 @@ else:
 
 app = FastAPI(title="Medical AI Backend")
 
+frontend_url = os.getenv("FRONTEND_URL")
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3004",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3004",
+]
+if frontend_url:
+    allowed_origins.append(frontend_url.rstrip("/"))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3004",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:3004",
-    ],  # frontend URLs
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

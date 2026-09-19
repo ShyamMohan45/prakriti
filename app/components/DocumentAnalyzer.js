@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { BACKEND_URL } from "@/lib/backendUrl"
 
 export default function DocumentAnalyzer() {
   const [file, setFile] = useState(null)
@@ -41,7 +42,7 @@ export default function DocumentAnalyzer() {
     formData.append("file", file)
 
     try {
-      const response = await fetch("http://localhost:8000/analyze", {
+      const response = await fetch(`${BACKEND_URL}/analyze`, {
         method: "POST",
         body: formData,
         credentials: "include",
@@ -79,7 +80,7 @@ export default function DocumentAnalyzer() {
     setStreaming(true)
 
     try {
-      const response = await fetch("http://localhost:8000/chat/stream", {
+      const response = await fetch(`${BACKEND_URL}/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: chatInput }),

@@ -2,11 +2,14 @@
 
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "../context/AuthContext"
+import { BACKEND_URL } from "@/lib/backendUrl"
 
-export default function ChatPage() {
+export const dynamic = "force-dynamic"
+
+function ChatContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, loading } = useAuth()
@@ -51,7 +54,7 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, { role: "bot", text: "" }])
 
     try {
-      const res = await fetch("http://localhost:8000/chat/stream", {
+      const res = await fetch(`${BACKEND_URL}/chat/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMessage }),
@@ -141,5 +144,13 @@ export default function ChatPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={null}>
+      <ChatContent />
+    </Suspense>
   )
 }

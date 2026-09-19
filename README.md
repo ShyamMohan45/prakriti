@@ -1,5 +1,16 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Production Deployment
+
+The application uses two services:
+
+- Next.js frontend and API routes: deploy to Vercel with `npm run build` and `npm start`.
+- FastAPI medical backend: deploy separately with `uvicorn app.main:app --host 0.0.0.0 --port 8000` from the `backend` directory.
+
+Set `NEXT_PUBLIC_BACKEND_URL` in the frontend host to the public FastAPI URL. Set `GEMINI_API_KEY` and the `DATABASE_*` variables in the backend host. Set the database, email, JWT, and admin variables in the frontend host. A complete variable template is available in `.env.production.example`.
+
+The FastAPI CORS allowlist in `backend/app/main.py` must include the deployed frontend domain.
+
 ## Getting Started
 
 First, run the development server:
