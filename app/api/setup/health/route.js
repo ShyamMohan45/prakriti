@@ -1,4 +1,6 @@
-import { NextResponse } from "next/server"
+import { getPool } from "@/lib/db"
+
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   const checks = {
@@ -22,26 +24,21 @@ export async function GET() {
 
 async function checkDatabase() {
   try {
-    const host = process.env.DATABASE_HOST || "localhost"
-    const user = process.env.DATABASE_USER || "root"
-    const pass = process.env.DATABASE_PASS || "passsword"
-    const db = process.env.DATABASE_NAME || "dxassist"
-
-    // Try to connect
-    const mysql = require("mysql2/promise")
-    const conn = await mysql.createConnection({ host, user, password: pass, database: db })
-    await conn.end()
+    await getPool.query("SELECT 1")
 
     return {
       status: "✅",
       message: "Database connected successfully",
-      config: { host, user, db }
+      config: {
+        host: (process.env.DATABASE_HOST || "localhost").slice(0, 30) + "...",
+        db: process.env.DATABASE_NAME || "test"
+      }
     }
   } catch (err) {
     return {
       status: "❌",
       message: "Database connection failed: " + err.message,
-      fix: "Make sure MySQL is running with correct password"
+      fix: "Verify DATABASE_HOST and credentials in Vercel settings"
     }
   }
 }
