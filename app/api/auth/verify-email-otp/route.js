@@ -26,7 +26,7 @@ export async function POST(req) {
     console.log("🔑 OTP trimmed:", otpTrimmed)
 
     // First check all OTPs for this email
-    const [allRecords] = await db.query(
+    const [allRecords] = await getPool.query(
       "SELECT email, otp, expires_at FROM email_otps WHERE email = ?",
       [email]
     )
@@ -36,7 +36,7 @@ export async function POST(req) {
       console.log(`   Record ${i}: otp="${r.otp}" (type: ${typeof r.otp}), expires_at=${r.expires_at}`)
     })
 
-    const [rows] = await db.query(
+    const [rows] = await getPool.query(
       "SELECT * FROM email_otps WHERE email = ? AND otp = ?",
       [email, otpTrimmed]
     )
@@ -64,11 +64,11 @@ export async function POST(req) {
     console.log("✅ OTP valid")
 
     // Delete OTP
-    await db.query("DELETE FROM email_otps WHERE email = ?", [email])
+    await getPool.query("DELETE FROM email_otps WHERE email = ?", [email])
     console.log("🗑️ OTP deleted")
 
     // Get user
-    const [users] = await db.query(
+    const [users] = await getPool.query(
       "SELECT id, name, email FROM users WHERE email = ?",
       [email]
     )

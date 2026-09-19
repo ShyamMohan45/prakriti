@@ -56,11 +56,23 @@ This shows the status of all connections.
 - Fix: Add valid Gmail credentials to `.env.local`
 
 ## Email Setup (Optional)
-If you want real email OTP:
-1. Use Gmail account
-2. Generate App Password: https://myaccount.google.com/apppasswords
-3. Update `.env.local`:
+To send OTP to any registered email address, configure one SMTP sender account. Gmail is shown below, but any SMTP provider can be used:
+1. For Gmail, generate an App Password: https://myaccount.google.com/apppasswords
+2. Update `.env.local`:
 ```dotenv
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=sender@example.com
+EMAIL_PASS=your-smtp-password-or-app-password
+EMAIL_FROM=sender@example.com
 ```
+`EMAIL_FROM` is optional and defaults to `EMAIL_USER`. The address entered by each user is used as the OTP recipient.
+
+## Admin Dashboard
+The `/dashboard` page is restricted to an admin login. Add separate local admin credentials to `.env.local`:
+```dotenv
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=choose-a-local-admin-password
+```
+Restart Next.js after changing these values, then sign in at `/login` with the configured admin credentials.

@@ -4,7 +4,7 @@ import { getPool } from "@/lib/db"
 
 export async function GET() {
   try {
-    const [posts] = await db.query("SELECT * FROM posts")
+    const [posts] = await getPool.query("SELECT * FROM posts")
 
     return NextResponse.json({
       success: true,

@@ -1,16 +1,17 @@
 import logging
 import os
 import json
+from pathlib import Path
 from dotenv import load_dotenv
 import google.generativeai as genai
 from app.prompts import MEDICAL_PROMPT
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 logger = logging.getLogger(__name__)
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-3.6-flash")
 
 
 def analyze_medical_file(text: str) -> dict:

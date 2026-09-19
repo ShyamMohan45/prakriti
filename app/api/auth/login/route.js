@@ -41,7 +41,7 @@ export async function POST(req) {
     }
 
     
-    const [[user]] = await db.query(
+    const [[user]] = await getPool.query(
       "SELECT * FROM users WHERE email = ?",
       [email]
     )

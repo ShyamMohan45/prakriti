@@ -6,6 +6,7 @@ import { getPool } from "@/lib/db"
 import { NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 import { createTables } from "@/lib/dbUtils"
+import { getEmailConfig } from "@/lib/emailConfig"
 
 export async function POST(req) {
   try {
@@ -22,7 +23,7 @@ export async function POST(req) {
 
     // Check if email exists in users table
     try {
-      const [users] = await db.query(
+      const [users] = await getPool.query(
         "SELECT id FROM users WHERE email = ?",
         [email]
       )
@@ -41,14 +42,19 @@ export async function POST(req) {
       throw queryErr
     }
 
-    // Check email credentials with fallback
-    const emailUser = process.env.EMAIL_USER || "shyammohanfaujdaar@gmail.com"
-    const emailPass = process.env.EMAIL_PASS || "yimn mwvi yqms voat"
+    const {
+      user: emailUser,
+      pass: emailPass,
+      host: emailHost,
+      port: emailPort,
+      secure: emailSecure,
+      from: emailFrom,
+    } = getEmailConfig()
 
     console.log("📧 Email User:", emailUser ? "Set (" + emailUser + ")" : "Not set")
     console.log("📧 Email Pass:", emailPass ? "Set (length: " + emailPass.length + ")" : "Not set")
 
-    if (!emailUser || !emailPass || emailUser === "YOUR_EMAIL" || emailPass === "YOUR_PASSWORD") {
+    if (!emailUser || !emailPass) {
       return NextResponse.json(
         { message: "Email credentials not configured. Please set EMAIL_USER and EMAIL_PASS in .env.local" },
         { status: 500 }
@@ -64,10 +70,10 @@ export async function POST(req) {
 
     // Store OTP in database
     try {
-      await db.query("DELETE FROM email_otps WHERE email = ?", [email])
+      await getPool.query("DELETE FROM email_otps WHERE email = ?", [email])
       console.log("✅ [OTP] Deleted old OTPs")
 
-      const [insertResult] = await db.query(
+      const [insertResult] = await getPool.query(
         "INSERT INTO email_otps (email, otp, expires_at) VALUES (?, ?, ?)",
         [email, otp, expiresAt]
       )
@@ -77,7 +83,7 @@ export async function POST(req) {
       console.log("   Expires at:", expiresAt)
 
       // Verify it was stored
-      const [verify] = await db.query(
+      const [verify] = await getPool.query(
         "SELECT email, otp, expires_at FROM email_otps WHERE email = ?",
         [email]
       )
@@ -94,10 +100,10 @@ export async function POST(req) {
     console.log("📨 [OTP] Configuring email transporter...")
     
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
+      host: emailHost,
+      port: emailPort,
+      secure: emailSecure,
+      requireTLS: !emailSecure,
       auth: {
         user: emailUser,
         pass: emailPass,
@@ -107,7 +113,7 @@ export async function POST(req) {
     console.log("🚀 [OTP] Sending email...")
     
     await transporter.sendMail({
-      from: emailUser,
+      from: emailFrom,
       to: email,
       subject: "Your DxAssist OTP Code",
       html: "<h2>Your OTP Code: <strong>" + otp + "</strong></h2><p>Valid for 10 minutes</p>",

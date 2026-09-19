@@ -1,5 +1,6 @@
 
 import os
+from pathlib import Path
 from fastapi import FastAPI, UploadFile, File, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -8,13 +9,13 @@ from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from typing import Generator
 
-from app.ai import analyze_medical_file
+from app.ai import analyze_medical_file, model
 from app.db import save_analysis, get_analyses_by_user
 from app.auth import get_user
 from app.medical_routes import router as medical_router
 
 
-load_dotenv()  
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 
 
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
@@ -29,7 +30,13 @@ app = FastAPI(title="Medical AI Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000"],  # frontend URLs
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3004",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3004",
+    ],  # frontend URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -69,6 +76,12 @@ async def analyze(
 
         # Run AI analysis
         result = analyze_medical_file(temp_path)
+
+        if result.get("error"):
+            return {
+                "status": "error",
+                "message": result["error"],
+            }
 
         # Store in DB (per user)
         save_analysis(
@@ -122,10 +135,19 @@ def chat_stream(req: ChatRequest):
     Requires HUGGINGFACEHUB_API_TOKEN environment variable.
     """
     if not HUGGINGFACEHUB_API_TOKEN:
-        return {
-            "status": "error",
-            "message": "HuggingFace API token not configured"
-        }
+        def gemini_generator() -> Generator[str, None, None]:
+            try:
+                prompt = f"{SYSTEM_MESSAGE['content']}\n\nUser question: {req.message}"
+                stream = model.generate_content(prompt, stream=True)
+
+                for chunk in stream:
+                    text = getattr(chunk, "text", "")
+                    if text:
+                        yield text
+            except Exception as e:
+                yield f"\n[Error: {str(e)}]\n"
+
+        return StreamingResponse(gemini_generator(), media_type="text/plain")
 
     def generator() -> Generator[str, None, None]:
         try:

@@ -64,6 +64,10 @@ export default function AnalyzePage() {
       const json = JSON.parse(text);
       console.log("✅ [Analyze] Parsed response:", json);
 
+      if (!res.ok || json.status === "error") {
+        throw new Error(json.message || "Clinical analysis failed")
+      }
+
       setSavingToDB(true);
 
       // Set result from direct response fields

@@ -38,7 +38,7 @@ export async function GET(req) {
 
    
     if (email) {
-      const [[user]] = await db.query(
+      const [[user]] = await getPool.query(
         "SELECT id, email FROM users WHERE email = ?",
         [email]
       );
@@ -54,7 +54,7 @@ export async function GET(req) {
       userEmail = user.email;
     } else {
      
-      const [[self]] = await db.query(
+      const [[self]] = await getPool.query(
         "SELECT id, email FROM users WHERE email = ?",
         [admin.email]
       );
@@ -64,7 +64,7 @@ export async function GET(req) {
     }
 
 
-    const [[lastAnalysis]] = await db.query(
+    const [[lastAnalysis]] = await getPool.query(
       `
       SELECT summary, created_at
       FROM medical_analyses
@@ -76,7 +76,7 @@ export async function GET(req) {
     );
 
 
-    const [analyses] = await db.query(
+    const [analyses] = await getPool.query(
       `
       SELECT summary, created_at
       FROM medical_analyses
