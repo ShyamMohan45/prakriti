@@ -7,6 +7,8 @@ import bcrypt from "bcryptjs"
 import { NextResponse } from "next/server"
 import { createTables } from "@/lib/dbUtils"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req) {
   try {
     await createTables()

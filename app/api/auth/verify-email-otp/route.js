@@ -6,6 +6,8 @@ import { NextResponse } from "next/server"
 import { signToken } from "@/lib/auth"
 import { cookies } from "next/headers"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req) {
   try {
     const { email, otp } = await req.json()

@@ -8,6 +8,8 @@ import nodemailer from "nodemailer"
 import { createTables } from "@/lib/dbUtils"
 import { getEmailConfig } from "@/lib/emailConfig"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req) {
   try {
     // Ensure tables exist
