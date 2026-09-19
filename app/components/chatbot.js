@@ -37,7 +37,7 @@ export default function Chatbot({ initialQuery }) {
               }`}
             >
               <span className="block text-xs font-semibold mb-1 opacity-70">
-                {m.role === "user" ? "You" : "DxAssist"}
+                {m.role === "user" ? "Clinician" : "Prakriti AI"}
               </span>
               {m.text}
             </div>

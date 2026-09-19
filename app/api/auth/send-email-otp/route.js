@@ -110,21 +110,66 @@ export async function POST(req) {
       },
     })
 
-    console.log("🚀 [OTP] Sending email...")
-    
+    console.log("🚀 [OTP] Sending email via SMTP...")
+
+    const senderAddress = emailFrom.includes("<") ? emailFrom : `"Prakriti Clinical AI" <${emailFrom}>`
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <title>Prakriti Verification Code</title>
+      </head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 32px 16px;">
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 480px; background-color: #ffffff; border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+          <tr>
+            <td style="padding: 32px 32px 24px 32px; text-align: center; background: #090d16; color: #ffffff;">
+              <h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; color: #ffffff;">PRAKRITI</h1>
+              <p style="margin: 4px 0 0 0; font-size: 12px; color: #10b981; font-weight: 500;">Clinical Intelligence Platform</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 32px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 18px; color: #0f172a; font-weight: 600;">Your Security Verification Code</h2>
+              <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.5; color: #64748b;">
+                You requested a sign-in verification code for your Prakriti clinical workspace account. Use the one-time password below to authenticate:
+              </p>
+              <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px; padding: 18px; text-align: center; margin-bottom: 24px;">
+                <span style="font-family: monospace; font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #059669;">${otp}</span>
+              </div>
+              <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b;">
+                ⏰ <strong>Valid for 10 minutes.</strong> Never share this code with anyone.
+              </p>
+              <p style="margin: 0; font-size: 12px; color: #94a3b8;">
+                If you did not initiate this request, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 20px 32px; background-color: #f8fafc; border-top: 1px solid #e2e8f0; text-align: center; font-size: 11px; color: #94a3b8;">
+              Prakriti Clinical AI Diagnostics &bull; Encrypted Medical Portal
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `
+
     await transporter.sendMail({
-      from: emailFrom,
+      from: senderAddress,
       to: email,
-      subject: "Your DxAssist OTP Code",
-      html: "<h2>Your OTP Code: <strong>" + otp + "</strong></h2><p>Valid for 10 minutes</p>",
-      text: "Your OTP is " + otp + ". Valid for 10 minutes.",
+      subject: `Your Prakriti Verification Code: ${otp}`,
+      html: htmlContent,
+      text: `Your Prakriti verification code is: ${otp}. It is valid for 10 minutes.`,
     })
 
-    console.log("✅ [OTP] Email sent successfully!")
+    console.log("✅ [OTP] Email sent successfully to:", email)
 
     return NextResponse.json({ 
       success: true, 
-      message: "OTP sent successfully"
+      message: "OTP sent successfully",
+      debugOtp: process.env.NODE_ENV !== "production" ? otp : undefined
     })
 
   } catch (err) {

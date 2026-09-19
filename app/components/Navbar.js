@@ -1,894 +1,269 @@
-// "use client";
-
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
-// import ThemeToggle from "./ThemeToggle";
-// import { useAuth } from "../context/AuthContext";
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth();
-//   const router = useRouter();
-
-//   const handleLogout = async () => {
-//     await fetch("/api/auth/logout", { method: "POST" });
-//     setUser(null);
-//     router.push("/");
-//   };
-
-//   if (loading) return null;
-
-//   return (
-//     <nav className="flex justify-between items-center h-20 px-10 bg-white shadow">
-//       <Link href="/" className="text-3xl font-bold text-emerald-500">
-//         DxAssist
-//       </Link>
-
-//       <ul className="flex items-center gap-6 font-semibold">
-//         <Link href="/history">History</Link>
-//         <Link href="/diagnostics">Diagnostics</Link>
-//         <Link href="/templates">Templates</Link>
-
-//         {user ? (
-//           <>
-//             <span className="text-emerald-600">Hi, {user.name}</span>
-//             <button
-//               onClick={handleLogout}
-//               className="px-4 py-2 bg-red-500 text-white rounded"
-//             >
-//               Sign Out
-//             </button>
-//           </>
-//         ) : (
-//           <>
-//             <Link href="/login">Login</Link>
-//             <Link href="/signup">Signup</Link>
-//           </>
-//         )}
-
-//         <ThemeToggle />
-//       </ul>
-//     </nav>
-//   );
-// }
-// "use client"
-
-// import Link from "next/link"
-// import { useRouter } from "next/navigation"
-// import ThemeToggle from "./ThemeToggle"
-// import { useAuth } from "../context/AuthContext"
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth()
-//   const router = useRouter()
-
-//   const handleLogout = async () => {
-//     await fetch("/api/auth/logout", { method: "POST" })
-//     setUser(null)
-//     router.push("/")
-//   }
-
-//   if (loading) return null
-
-//   return (
-//     <nav
-//       className="
-//         relative flex justify-between items-center
-//         sticky top-0 z-50
-//         h-20 px-10
-
-//         bg-white/60 dark:bg-slate-900/60
-//         backdrop-blur-2xl
-
-//         text-black dark:text-white
-//         border-b border-black/10 dark:border-slate-700/40
-
-//         shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-//         transition-all duration-500
-//       "
-//     >
-//       {/* GLOW LAYER */}
-//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
-
-//       {/* LOGO */}
-//       <div
-//         className="
-//           relative text-3xl font-extrabold tracking-wide
-//           bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-//           bg-clip-text text-transparent
-//           hover:scale-110
-//           transition-transform duration-300
-//         "
-//       >
-//         <Link href="/">DxAssist</Link>
-//       </div>
-
-//       {/* NAV LINKS */}
-//       <ul className="relative flex items-center gap-10 text-sm font-semibold">
-//         {[
-//           { name: "Patient Queue", href: "/templates" },
-//           { name: "Clinical Analysis", href: "/diagnostics" },
-//           { name: "Medical Knowledge Base", href: "/history" },
-//         ].map((item) => (
-//           <li key={item.href} className="relative group">
-//             <Link
-//               href={item.href}
-//               className="opacity-80 hover:opacity-100 transition-all duration-300"
-//             >
-//               {item.name}
-//             </Link>
-
-//             <span
-//               className="
-//                 absolute -bottom-2 left-1/2 -translate-x-1/2
-//                 h-[2px] w-0
-//                 bg-gradient-to-r from-emerald-400 to-cyan-400
-//                 rounded-full
-//                 group-hover:w-full
-//                 transition-all duration-300
-//               "
-//             />
-//           </li>
-//         ))}
-
-//         {/* GET STARTED */}
-//         <li className="relative group">
-//           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60 group-hover:opacity-100 transition" />
-//           <Link
-//             href="/start"
-//             className="
-//               relative px-6 py-2.5 rounded-xl
-//               bg-gradient-to-r from-emerald-400 to-cyan-400
-//               text-black font-bold
-//               shadow-lg
-//               hover:scale-110 active:scale-95
-//               transition-all duration-300
-//             "
-//           >
-//             Get started
-//           </Link>
-//         </li>
-
-//         {/* GOOGLE TRANSLATE */}
-//        <li
-//           className="
-//             relative px-3 py-1.5 rounded-lg
-//             bg-black/5 dark:bg-white/10
-//             backdrop-blur
-//             hover:bg-black/10 dark:hover:bg-white/20
-//             transition
-//           "
-//         >
-//           <div id="google_translate_element"></div>
-//         </li>
-
-//         {/* AUTH SECTION (ADDED FROM FIRST CODE) */}
-//         {user ? (
-//           <>
-//             <li className="text-emerald-400 font-medium">
-//               Hi, {user.name}
-//             </li>
-
-//             <li>
-//               <button
-//                 onClick={handleLogout}
-//                 className="
-//                   px-4 py-2 rounded-lg
-//                   bg-red-500/90 text-white
-//                   hover:bg-red-600
-//                   transition
-//                 "
-//               >
-//                 Sign Out
-//               </button>
-//             </li>
-//           </>
-//         ) : (
-//           <>
-//             <li className="relative group">
-//               <Link href="/login" className="opacity-80 hover:opacity-100 transition">
-//                 Login
-//               </Link>
-//             </li>
-
-//             <li className="relative group">
-//               <Link href="/signup" className="opacity-80 hover:opacity-100 transition">
-//                 Signup
-//               </Link>
-//             </li>
-//           </>
-//         )}
-
-//         {/* THEME TOGGLE */}
-//         <li className="hover:scale-125 transition-transform duration-300">
-//           <ThemeToggle />
-//         </li>
-//       </ul>
-//     </nav>
-//   )
-// }
-
-// "use client"
-
-// import Link from "next/link"
-// import { useRouter } from "next/navigation"
-// import { useEffect } from "react"
-// import ThemeToggle from "./ThemeToggle"
-// import { useAuth } from "../context/AuthContext"
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth()
-//   const router = useRouter()
-
-//   // const handleLogout = async () => {
-//   //   await fetch("/api/auth/logout", { method: "POST" })
-//   //   setUser(null)
-//   //   router.push("/")
-//   // }
-
-//   
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       if (
-//         window.google &&
-//         window.google.translate &&
-//         typeof window.googleTranslateElementInit === "function"
-//       ) {
-//         window.googleTranslateElementInit()
-//         clearInterval(interval)
-//       }
-//     }, 300)
-
-//     return () => clearInterval(interval)
-//   }, [])
-
-//   if (loading) return null
-
-//   return (
-//     <nav
-//       className="
-//         relative flex justify-between items-center
-//         sticky top-0 z-50
-//         h-20 px-10
-//         bg-white/60 dark:bg-slate-900/60
-//         backdrop-blur-2xl
-//         text-black dark:text-white
-//         border-b border-black/10 dark:border-slate-700/40
-//         shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-//         transition-all duration-500
-//       "
-//     >
-//       {/* GLOW */}
-//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
-
-//       {/* LOGO */}
-//       <Link
-//         href="/"
-//         className="
-//           relative text-3xl font-extrabold tracking-wide
-//           bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-//           bg-clip-text text-transparent
-//           hover:scale-110 transition-transform
-//         "
-//       >
-//         DxAssist
-//       </Link>
-
-//       {/* NAV */}
-//       <ul className="relative flex items-center gap-10 text-sm font-semibold">
-//         {[
-//           { name: "dashboard", href: "/dashboard" },
-//           { name: "Clinical Analysis", href: "/diagnostics" },
-//           { name: "Medical Knowledge Base", href: "/history" },
-//         ].map((item) => (
-//           <li key={item.href} className="relative group">
-//             <Link href={item.href} className="opacity-80 hover:opacity-100 transition">
-//               {item.name}
-//             </Link>
-//             <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-[2px] w-0 bg-gradient-to-r from-emerald-400 to-cyan-400 group-hover:w-full transition-all" />
-//           </li>
-//         ))}
-
-//         {/* GET STARTED */}
-//         <li className="relative group">
-//           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60 group-hover:opacity-100 transition" />
-//           <Link
-//             href="/start"
-//             className="relative px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-bold hover:scale-110 transition"
-//           >
-//             Get started
-//           </Link>
-//         </li>
-
-// {/* <li>
-//   <Link href="/login">Login</Link>
-// </li>
-// <li>
-//   <Link href="/signup">Signup</Link>
-// </li> */}
-// {/* 
-// {user ? (
-//   <>
-//     <li className="opacity-90">
-//        <span className="font-bold">{user.name}</span>
-//     </li>
-
-//     <li>
-//       <button
-//         onClick={handleLogout}
-//         className="hover:opacity-80 transition"
-//       >
-//         Logout
-//       </button>
-//     </li>
-//   </>
-// ) : (
-//   <>
-//     <li>
-//       <Link href="/login">Login</Link>
-//     </li>
-//     <li>
-//       <Link href="/signup">Signup</Link>
-//     </li>
-//   </>
-// )}  */}
-
-
-
-//        
-//         <li className="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10 backdrop-blur">
-//           <div id="google_translate_element" />
-//         </li>
-
-      
-
-        
-
-//         {/* THEME */}
-//         <li className="hover:scale-125 transition">
-//           <ThemeToggle />
-//         </li>
-//       </ul>
-
-            
-//     </nav>
-//   )
-// }
-
-
-
-// "use client"
-
-// import Link from "next/link"
-// import { useRouter } from "next/navigation"
-// import { useEffect } from "react"
-// import ThemeToggle from "./ThemeToggle"
-// import { useAuth } from "../context/AuthContext"
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth()
-//   const router = useRouter()
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       if (
-//         window.google &&
-//         window.google.translate &&
-//         typeof window.googleTranslateElementInit === "function"
-//       ) {
-//         window.googleTranslateElementInit()
-//         clearInterval(interval)
-//       }
-//     }, 300)
-
-//     return () => clearInterval(interval)
-//   }, [])
-
-//   if (loading) return null
-
-//   return (
-//     <nav
-//       className="
-//         relative flex justify-between items-center
-//         sticky top-0 z-50
-//         h-20 px-10
-//         bg-white/60 dark:bg-slate-900/60
-//         backdrop-blur-2xl
-//         text-black dark:text-white
-//         border-b border-black/10 dark:border-slate-700/40
-//         shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-//         transition-all duration-500
-//       "
-//     >
-//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
-
-//       <Link
-//         href="/"
-//         className="
-//           relative text-3xl font-extrabold tracking-wide
-//           bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-//           bg-clip-text text-transparent
-//           hover:scale-110 transition-transform
-//         "
-//       >
-//         DxAssist
-//       </Link>
-      
-
-//       <ul className="relative flex items-center gap-10 text-sm font-semibold">
-//         {[
-//           { name: "dashboard", href: "/admin/dashboard" },
-//           { name: "Clinical Analysis", href: "/diagnostics" },
-//           { name: "Medical Knowledge Base", href: "/history" },
-//         ].map((item) => (
-//           <li key={item.href} className="relative group">
-//             <Link href={item.href} className="opacity-80 hover:opacity-100 transition">
-//               {item.name}
-//             </Link>
-//             <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-[2px] w-0 bg-gradient-to-r from-emerald-400 to-cyan-400 group-hover:w-full transition-all" />
-//           </li>
-//         ))}
-
-//         <li className="relative group">
-//           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60 group-hover:opacity-100 transition" />
-//           <Link
-//             href="/start"
-//             className="relative px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-bold hover:scale-110 transition"
-//           >
-//             Get started
-//           </Link>
-//         </li>
-
-//         {/* 🔐 AUTH BUTTONS */}
-//         {!user ? (
-//           <>
-//             <li>
-//               <Link href="/login" className="opacity-80 hover:opacity-100 transition">
-//                 Login
-//               </Link>
-//             </li>
-//             <li>
-//               <Link href="/signup" className="opacity-80 hover:opacity-100 transition">
-//                 Signup
-//               </Link>
-//             </li>
-//           </>
-//         ) : (
-//           <li className="flex items-center gap-4">
-//             <span className="text-emerald-400 font-bold">
-//               {user.name}
-//             </span>
-//             <button
-//               onClick={async () => {
-//                 await fetch("/api/auth/logout", { method: "POST" })
-//                 setUser(null)
-//                 router.push("/")
-//               }}
-//               className="text-red-400 hover:text-red-500 transition"
-//             >
-//               Logout
-//             </button>
-//           </li>
-//         )}
-
-//         <li className="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10 backdrop-blur">
-//           <div id="google_translate_element" />
-//         </li>
-
-//         <li className="hover:scale-125 transition">
-//           <ThemeToggle />
-//         </li>
-//       </ul>
-//     </nav>
-//   )
-// }
-
-
-
-
-
-
-
-
-// "use client"
-
-// import Link from "next/link"
-// import { useRouter } from "next/navigation"
-// import { useEffect } from "react"
-// import ThemeToggle from "./ThemeToggle"
-// import { useAuth } from "../context/AuthContext"
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth()
-//   const router = useRouter()
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       if (
-//         window.google &&
-//         window.google.translate &&
-//         typeof window.googleTranslateElementInit === "function"
-//       ) {
-//         window.googleTranslateElementInit()
-//         clearInterval(interval)
-//       }
-//     }, 300)
-
-//     return () => clearInterval(interval)
-//   }, [])
-
-//   if (loading) return null
-
-//   return (
-//     <nav
-//       className="
-//         relative flex justify-between items-center
-//         sticky top-0 z-50
-//         h-20 px-10
-//       bg-gradient-to-b from-[#0E1B2B] to-[#0B1623]
-//         backdrop-blur-2xl
-//         text-black dark:text-white
-//         border-b border-black/10 dark:border-slate-700/40
-//         shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-//         transition-all duration-500
-//       "
-//     >
-//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
-
-//       <Link
-//         href="/"
-//         className="
-//           relative text-3xl font-extrabold tracking-wide
-//           bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-//           bg-clip-text text-transparent
-//           hover:scale-110 transition-transform
-//         "
-//       >
-//         DxAssist
-//       </Link>
-      
-
-//       <ul className="relative flex items-center gap-10 text-sm font-semibold">
-//         {[
-//           { name: "dashboard", href: "/dashboard" },
-//           { name: "Clinical Analysis", href: "/diagnostics" },
-//           { name: "Medical Knowledge Base", href: "/history" },
-//         ].map((item) => (
-//           <li key={item.href} className="relative group">
-//             <Link href={item.href} className="opacity-80 hover:opacity-100 transition">
-//               {item.name}
-//             </Link>
-//             <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 h-[2px] w-0 bg-gradient-to-r from-emerald-400 to-cyan-400 group-hover:w-full transition-all" />
-//           </li>
-//         ))}
-
-//         <li className="relative group">
-//           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60 group-hover:opacity-100 transition" />
-//           <Link
-//             href="/start"
-//             className="relative px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-bold hover:scale-110 transition"
-//           >
-//             Get started
-//           </Link>
-//         </li>
-
-//         {/* 🔐 AUTH BUTTONS */}
-//         {!user ? (
-//           <>
-//             <li>
-//               <Link href="/login" className="opacity-80 hover:opacity-100 transition">
-//                 Login
-//               </Link>
-//             </li>
-//             <li>
-//               <Link href="/signup" className="opacity-80 hover:opacity-100 transition">
-//                 Signup
-//               </Link>
-//             </li>
-//           </>
-//         ) : (
-//           <li className="flex items-center gap-4">
-//             <span className="text-emerald-400 font-bold">
-//               {user.name}
-//             </span>
-//             <button
-//               onClick={async () => {
-//                 await fetch("/api/auth/logout", { method: "POST" })
-//                 setUser(null)
-//                 router.push("/")
-//               }}
-//               className="text-red-400 hover:text-red-500 transition"
-//             >
-//               Logout
-//             </button>
-//           </li>
-//         )}
-
-//         <li className="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10 backdrop-blur">
-//           <div id="google_translate_element" />
-//         </li>
-
-//         <li className="hover:scale-125 transition">
-//           <ThemeToggle />
-//         </li>
-//       </ul>
-//     </nav>
-//   )
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// "use client"
-
-// import Link from "next/link"
-// import { useRouter } from "next/navigation"
-// import { useEffect } from "react"
-// import ThemeToggle from "./ThemeToggle"
-// import { useAuth } from "../context/AuthContext"
-
-// export default function Navbar() {
-//   const { user, loading, setUser } = useAuth()
-//   const router = useRouter()
-
-//   // ✅ Always initialize Google Translate AFTER mount
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       if (
-//         window.google &&
-//         window.google.translate &&
-//         typeof window.googleTranslateElementInit === "function"
-//       ) {
-//         window.googleTranslateElementInit()
-//         clearInterval(interval)
-//       }
-//     }, 300)
-
-//     return () => clearInterval(interval)
-//   }, [])
-
-//   return (
-//     <nav
-// className="      
-//         sticky top-0 left-0 right-0
-//         z-[100]
-//         flex justify-between items-center
-//         min-h-20 px-10
-//         bg-gradient-to-b from-[#0E1B2B] to-[#0B1623]
-//         backdrop-blur-2xl
-//         text-black dark:text-white
-//         border-b border-black/10 dark:border-slate-700/40
-//         shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-//         overflow-visible
-//       "
-//     >
-//       {/* glow */}
-//       <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
-
-//       {/* logo */}
-//       <Link
-//         href="/"
-//         className="relative text-2xl font-extrabold tracking-wide
-//                    bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-//                    bg-clip-text text-transparent"
-//       >
-//         DxAssist
-//       </Link>
-
-//       <ul className="relative flex items-center gap-10 text-sm font-semibold">
-//         {[
-//           { name: "dashboard", href: "/dashboard" },
-//           { name: "Clinical Analysis", href: "/diagnostics" },
-//           { name: "Medical Knowledge Base", href: "/history" },
-//         ].map((item) => (
-//           <li key={item.href} className="relative group">
-//             <Link href={item.href} className="opacity-80 hover:opacity-100">
-//               {item.name}
-//             </Link>
-//             <span className="absolute -bottom-2 left-1/2 -translate-x-1/2
-//                              h-[2px] w-0 bg-gradient-to-r
-//                              from-emerald-400 to-cyan-400
-//                              group-hover:w-full transition-all" />
-//           </li>
-//         ))}
-
-//         {/* CTA */}
-//         <li className="relative group">
-//           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60" />
-//           <Link
-//             href="/start"
-//             className="relative px-6 py-2.5 rounded-xl
-//                        bg-gradient-to-r from-emerald-400 to-cyan-400
-//                        text-black font-bold"
-//           >
-//             Get started
-//           </Link>
-//         </li>
-
-//         {/* AUTH — handled safely */}
-//         {!loading && !user && (
-//           <>
-//             <li>
-//               <Link href="/login" className="opacity-80 hover:opacity-100">
-//                 Login
-//               </Link>
-//             </li>
-//             <li>
-//               <Link href="/signup" className="opacity-80 hover:opacity-100">
-//                 Signup
-//               </Link>
-//             </li>
-//           </>
-//         )}
-
-//         {!loading && user && (
-//           <li className="flex items-center gap-4">
-//             <span className="text-emerald-400 font-bold">{user.name}</span>
-//             <button
-//               onClick={async () => {
-//                 await fetch("/api/auth/logout", { method: "POST" })
-//                 setUser(null)
-//                 router.push("/")
-//               }}
-//               className="text-red-400 hover:text-red-500"
-//             >
-//               Logout
-//             </button>
-//           </li>
-//         )}
-
-//         {/* 🌍 GOOGLE TRANSLATE — ALWAYS PRESENT */}
-//         <li className="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10">
-//           <div id="google_translate_element" />
-//         </li>
-
-//         {/* theme */}
-//         <li>
-//           <ThemeToggle />
-//         </li>
-//       </ul>
-//     </nav>
-//   )
-// }
-
-
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import ThemeToggle from "./ThemeToggle"
+import { usePathname, useRouter } from "next/navigation"
+import { useState } from "react"
 import { useAuth } from "../context/AuthContext"
+import ThemeToggle from "./ThemeToggle"
+import {
+  Activity,
+  LogOut,
+  LogIn,
+  UserPlus,
+  Menu,
+  X,
+  LayoutDashboard,
+  FileSearch,
+  Sparkles,
+  ShieldCheck
+} from "lucide-react"
 
 export default function Navbar() {
   const { user, loading, setUser } = useAuth()
+  const pathname = usePathname()
   const router = useRouter()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // ✅ Always initialize Google Translate AFTER mount
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (
-        window.google &&
-        window.google.translate &&
-        typeof window.googleTranslateElementInit === "function"
-      ) {
-        window.googleTranslateElementInit()
-        clearInterval(interval)
-      }
-    }, 300)
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" })
+      setUser(null)
+      router.push("/")
+    } catch (err) {
+      console.error("Logout failed", err)
+    }
+  }
 
-    return () => clearInterval(interval)
-  }, [])
+  const navLinks = [
+    { name: "Platform", href: "/" },
+    { name: "Health Assessment ↗", href: "https://prakriti-gamma.vercel.app/", external: true },
+    { name: "Clinical AI", href: "/diagnostics/analyze" },
+    { name: "Diet by Body", href: "/#diet-by-body" },
+    { name: "Features", href: "/#features" },
+    { name: "Security", href: "/#security" },
+    { name: "About", href: "/#about" },
+  ]
+
+  const isActive = (path) => {
+    if (path === "/") return pathname === "/"
+    return pathname.startsWith(path) && path !== "/#"
+  }
 
   return (
-    <nav
-className="      
-        sticky top-0 left-0 right-0
-        z-[100]
-        flex justify-between items-center
-        min-h-20 px-10
-        bg-gradient-to-b from-[#0E1B2B] to-[#0B1623]
-        backdrop-blur-2xl
-        text-black dark:text-white
-        border-b border-black/10 dark:border-slate-700/40
-        shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-        overflow-visible
-      "
-    >
-      {/* glow */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-emerald-400/10 via-cyan-400/10 to-blue-400/10 blur-2xl opacity-70" />
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-[#090d16]/90 backdrop-blur-xl transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        {/* Brand Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center font-bold shadow-sm transition-transform duration-200 group-hover:scale-105">
+            <Activity className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl font-extrabold tracking-tight text-slate-900 dark:text-white uppercase letter-spacing-wide">
+              PRAKRITI
+            </span>
+            <span className="text-[9px] uppercase tracking-[0.25em] font-semibold text-emerald-600 dark:text-emerald-400 -mt-1">
+              Clinical Intelligence
+            </span>
+          </div>
+        </Link>
 
-      {/* logo */}
-      <Link
-        href="/"
-        className="relative text-3xl font-extrabold tracking-wide
-                   bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500
-                   bg-clip-text text-transparent"
-      >
-        DxAssist
-      </Link>
-
-      <ul className="relative flex items-center gap-10 text-sm font-semibold">
-        {[
-          { name: "dashboard", href: "/dashboard" },
-          { name: "Clinical Analysis", href: "/diagnostics" },
-          { name: "Medical Knowledge Base", href: "/history" },
-        ].map((item) => (
-          <li key={item.href} className="relative group">
-            <Link href={item.href} className="opacity-80 hover:opacity-100">
-              {item.name}
-            </Link>
-            <span className="absolute -bottom-2 left-1/2 -translate-x-1/2
-                             h-[2px] w-0 bg-gradient-to-r
-                             from-emerald-400 to-cyan-400
-                             group-hover:w-full transition-all" />
-          </li>
-        ))}
-
-        {/* CTA */}
-        {/* <li className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-xl blur opacity-60" />
-          <Link
-            href="/start"
-            className="relative px-6 py-2.5 rounded-xl
-                       bg-gradient-to-r from-emerald-400 to-cyan-400
-                       text-black font-bold"
-          >
-            Get start
-          </Link>
-        </li> */}
-
-        {/* AUTH — handled safely */}
-        {!loading && !user && (
-          <>
-            <li>
-              <Link href="/login" className="opacity-80 hover:opacity-100">
-                Login
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((item) => {
+            const active = isActive(item.href)
+            if (item.external) {
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition shadow-sm flex items-center gap-1"
+                >
+                  {item.name}
+                </a>
+              )
+            }
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-150 ${
+                  active
+                    ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800/60 font-semibold"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900/50"
+                }`}
+              >
+                {item.name}
               </Link>
-            </li>
-            <li>
-              <Link href="/signup" className="opacity-80 hover:opacity-100">
-                Signup
-              </Link>
-            </li>
-          </>
-        )}
+            )
+          })}
+        </nav>
 
-        {!loading && user && (
-          <li className="flex items-center gap-4">
-            <span className="text-emerald-400 font-bold">{user.name}</span>
-            <button
-              onClick={async () => {
-                await fetch("/api/auth/logout", { method: "POST" })
-                setUser(null)
-                router.push("/")
-              }}
-              className="text-red-400 hover:text-red-500"
-            >
-              Logout
-            </button>
-          </li>
-        )}
+        {/* Right Actions & Auth */}
+        <div className="hidden md:flex items-center gap-3">
+          
+          {/* Google Translate Wrapper */}
+          <div className="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 py-0.5">
+            <div id="google_translate_element" />
+          </div>
 
-        {/* 🌍 GOOGLE TRANSLATE — ALWAYS PRESENT */}
-        <li className="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/10">
-          <div id="google_translate_element" />
-        </li>
-
-        {/* theme */}
-        <li>
+          {/* Theme Switcher */}
           <ThemeToggle />
-        </li>
-      </ul>
-    </nav>
+
+          {/* User Section */}
+          {!loading && !user && (
+            <div className="flex items-center gap-2 pl-2">
+              <Link
+                href="/login"
+                className="px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-xl transition"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                className="px-4 py-2 text-sm font-semibold rounded-xl bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 shadow-sm transition active:scale-95"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
+
+          {!loading && user && (
+            <div className="flex items-center gap-3 pl-2 border-l border-slate-200 dark:border-slate-800">
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 transition"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>Dashboard</span>
+              </Link>
+
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold text-xs flex items-center justify-center shadow-inner">
+                  {user.name ? user.name[0].toUpperCase() : "U"}
+                </div>
+                <div className="hidden lg:flex flex-col text-left">
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                    {user.name}
+                  </span>
+                  <span className="text-[10px] text-slate-400 capitalize">
+                    {user.role || "Clinician"}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                title="Sign out"
+                className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Hamburger Toggle */}
+        <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#090d16] px-6 py-5 space-y-4">
+          <div className="flex flex-col space-y-2">
+            {navLinks.map((item) => {
+              if (item.external) {
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-4 py-2.5 rounded-xl text-sm font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800"
+                  >
+                    {item.name}
+                  </a>
+                )
+              }
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium ${
+                    isActive(item.href)
+                      ? "text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 font-semibold"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              )
+            })}
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="px-4 py-2.5 rounded-xl text-sm font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              Dashboard Workspace
+            </Link>
+          </div>
+
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+            {!loading && !user && (
+              <div className="grid grid-cols-2 gap-3">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-sm font-semibold"
+                >
+                  <LogIn className="w-4 h-4" />
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  Get Started
+                </Link>
+              </div>
+            )}
+
+            {!loading && user && (
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-slate-900">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center text-sm">
+                    {user.name ? user.name[0].toUpperCase() : "U"}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{user.name}</p>
+                    <p className="text-xs text-slate-500">{user.email}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg transition"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </header>
   )
 }

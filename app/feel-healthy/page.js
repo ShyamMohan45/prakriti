@@ -38,7 +38,7 @@ export default function page() {
           <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-teal-400"></div>
 
           <p className="mt-6 text-lg text-white/90">
-            DxAssist leverages AI to streamline documentation, surface critical
+            Prakriti leverages AI to streamline documentation, surface critical
             insights, and help clinicians make faster, more confident
             decisions—without adding complexity.
           </p>
@@ -46,16 +46,16 @@ export default function page() {
       </section>
 
       {/* RECIPES SECTION */}
-      <section className="w-full h-[706.64px] bg-[#eaf3f1] flex flex-col items-center justify-center">
-        <h2 className="text-4xl font-serif text-gray-800 mb-3">
+      <section className="w-full min-h-[600px] py-16 bg-[#eaf3f1] dark:bg-slate-900/60 flex flex-col items-center justify-center">
+        <h2 className="text-4xl font-serif text-gray-800 dark:text-white mb-3">
           Recipes & Health Tips
         </h2>
 
-        <p className="text-gray-600 mb-14">
+        <p className="text-gray-600 dark:text-slate-400 mb-14 text-center px-4">
           Learn more about maintaining good health and managing your conditions.
         </p>
 
-        <div className="max-w-6xl w-full grid grid-cols-3 gap-12 px-8">
+        <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-3 gap-8 px-6">
 
           {/* CARD 1 */}
           <div className="group bg-white rounded-xl shadow-md hover:shadow-2xl transition duration-300 overflow-hidden text-center">
